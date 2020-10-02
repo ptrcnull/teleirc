@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  teleirc:
+    container_name: teleirc
+    build: .
+    restart: always
+    volumes:
+      - ./offset:/app/offset
+    env_file: .env
