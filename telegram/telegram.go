@@ -102,10 +102,12 @@ func ConnectTelegram(incoming chan string, outgoing chan string) {
 					log.Println(m.Message)
 					log.Println(m.EditedMessage)
 				}
-				offset = res.Result[len(res.Result)-1].UpdateID + 1
-				err = ioutil.WriteFile("offset", []byte(strconv.FormatInt(offset, 10)), 0644)
-				if err != nil {
-					log.Println(err)
+				if len(res.Result) > 0 {
+					offset = res.Result[len(res.Result)-1].UpdateID + 1
+					err = ioutil.WriteFile("offset", []byte(strconv.FormatInt(offset, 10)), 0644)
+					if err != nil {
+						log.Println(err)
+					}
 				}
 			}
 			time.Sleep(time.Millisecond * 100)
