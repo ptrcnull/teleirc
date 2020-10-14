@@ -3,22 +3,13 @@ package irc
 import (
 	"crypto/tls"
 	"fmt"
+	"git.ddd.rip/ptrcnull/telegram"
 	"log"
 	"os"
 	"strings"
 
 	irc "github.com/fluffle/goirc/client"
 )
-
-const badChars = "_*[]()~`>#+-=|{}.!\\"
-
-func cleanMsg(msg string) string {
-	for _, char := range badChars {
-		ch := string(char)
-		msg = strings.Replace(msg, ch, "\\"+ch, -1)
-	}
-	return msg
-}
 
 func ConnectIRC(incoming chan string, outgoing chan string, mainquit chan bool) {
 	cfg := irc.NewConfig("tg")
@@ -49,7 +40,7 @@ func ConnectIRC(incoming chan string, outgoing chan string, mainquit chan bool) 
 		if line.Target() != "#telegram" {
 			return
 		}
-		outgoing <- fmt.Sprintf("*%s*: %s", line.Nick, cleanMsg(line.Text()))
+		outgoing <- fmt.Sprintf("*%s*: %s", line.Nick, telegram.EscapeMarkdown(line.Text()))
 	})
 
 	// Tell client to connect.
